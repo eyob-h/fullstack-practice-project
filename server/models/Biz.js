@@ -21,7 +21,7 @@ const bizSchema = mongoose.Schema(
     likes: {
       type: Map,
       of: Boolean,
-    },
+    }, //O(n) vs O(1) for array vs for map
     comments: {
       type: Array,
       default: [],
@@ -30,6 +30,6 @@ const bizSchema = mongoose.Schema(
   { timestamps: true }
 );
 
-const Post = mongoose.model("Biz", bizSchema);
+const Biz = mongoose.model("Biz", bizSchema);
 
 export default Biz;

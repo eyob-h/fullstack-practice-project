@@ -8,8 +8,16 @@ import helmet from "helmet";
 import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
-import { register } from "./controllers/auth.js";
 import authRoutes from "./routes/auth.js"; 
+import userRoutes from "./routes/users.js"; 
+import bizRoutes from "./routes/bizs.js";
+import { register } from "./controllers/auth.js";
+import { createBiz } from "./controllers/bizs.js";
+import { verifyToken } from "./middleware/auth.js";
+import User from "./models/User.js";
+import Biz from "./models/Biz.js";
+import { users, bizs } from "./data/index.js";
+
 
 
 
@@ -40,16 +48,17 @@ const storage = multer.diskStorage({
 
 // Routes that includes files
 app.post("/api/auth/register", upload.single("picture"), register); //it's here because we need it to be next to the upload function for the image uploading functionality to work
+app.post("/api/bizs", verifyToken, upload.single("picture"), createBiz);
 
 
 
 // Routes that don't need file upload (normal structure)
 app.use("/api/auth", authRoutes)
+app.use("/api/users", userRoutes);
 
 
 
 //Mongoose module setup
-/* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
 mongoose
   .connect(process.env.MONGO_URL, {
@@ -58,5 +67,8 @@ mongoose
   })
   .then(() => {
     app.listen(PORT, () => console.log(`Server Port: ${PORT}`));// call back function to display the port 
+     //One time data population
+    // User.insertMany(users);
+    // Biz.insertMany(bizs);
   })
   .catch((error) => console.log(`${error} did not connect`));
