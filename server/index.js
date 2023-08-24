@@ -9,6 +9,8 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 import { register } from "./controllers/auth.js";
+import authRoutes from "./routes/auth.js"; 
+
 
 
 //Configurations gotten from the packages' github repos.
@@ -37,7 +39,12 @@ const storage = multer.diskStorage({
   const upload = multer({ storage });
 
 // Routes that includes files
-app.post("/auth/register", upload.single("picture"), register);
+app.post("/api/auth/register", upload.single("picture"), register); //it's here because we need it to be next to the upload function for the image uploading functionality to work
+
+
+
+// Routes that don't need file upload (normal structure)
+app.use("/api/auth", authRoutes)
 
 
 
