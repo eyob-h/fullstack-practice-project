@@ -47,14 +47,15 @@ const storage = multer.diskStorage({
   const upload = multer({ storage });
 
 // Routes that includes files
-app.post("/api/auth/register", upload.single("picture"), register); //it's here because we need it to be next to the upload function for the image uploading functionality to work
-app.post("/api/bizs", verifyToken, upload.single("picture"), createBiz);
+app.post("/auth/register", upload.single("picture"), register); //it's here because we need it to be next to the upload function for the image uploading functionality to work
+app.post("/bizs", verifyToken, upload.single("picture"), createBiz);
 
 
 
 // Routes that don't need file upload (normal structure)
-app.use("/api/auth", authRoutes)
-app.use("/api/users", userRoutes);
+app.use("/auth", authRoutes)
+app.use("/users", userRoutes);
+app.use("/bizs", bizRoutes);
 
 
 
